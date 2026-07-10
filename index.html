@@ -1120,6 +1120,11 @@
     </div>
   </div>
 
+  <div class="gasto-stat" id="balance-box" style="margin-bottom:24px;">
+    <div class="stat-label">⚖️ Balance</div>
+    <div class="stat-val" id="stat-balance" style="font-size:1.2rem;">Todo cuadrado</div>
+  </div>
+
   <div class="gastos-form">
     <div class="full">
       <label>Descripción</label>
@@ -1501,6 +1506,16 @@ function renderGastos() {
   document.getElementById('stat-cata').textContent = fmt(cata);
   document.getElementById('stat-jaume').textContent = fmt(jaume);
   document.getElementById('stat-ambos').textContent = fmt(ambos);
+
+  const balanceEl = document.getElementById('stat-balance');
+  const diff = (cata - jaume) / 2;
+  if (Math.abs(diff) < 0.01) {
+    balanceEl.textContent = 'Todo cuadrado 🤝';
+  } else if (diff > 0) {
+    balanceEl.textContent = `Jaume debe a Catalina ${fmt(diff)}`;
+  } else {
+    balanceEl.textContent = `Catalina debe a Jaume ${fmt(-diff)}`;
+  }
 }
 
 // ── CHECKLIST ──
