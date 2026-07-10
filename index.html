@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalina & Jaume · Dolomitas 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚐</text></svg>">
+<style>
+  :root{
+    --bg:#0f1620;
+    --card:#1a2433;
+    --card2:#212e40;
+    --accent:#5fb3a3;
+    --accent2:#e8a23d;
+    --text:#eef2f6;
+    --muted:#9bacc0;
+    --pending:#3a4a5c;
+    --border:#2c3a4d;
+    --danger:#c0392b;
+    --success:#27ae60;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+  }
+  header{
+    padding:32px 20px 18px;
+    text-align:center;
+    background:linear-gradient(180deg,#16202c,#0f1620);
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.8rem;
+    letter-spacing:.5px;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:.95rem;
+  }
+  .tags{
+    margin-top:12px;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .tag{
+    background:var(--card2);
+    border:1px solid var(--border);
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:.82rem;
+    color:var(--accent);
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav{
+    display:flex;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  .tab-btn{
+    flex:1;
+    background:none;
+    border:none;
+    border-bottom:3px solid transparent;
+    color:var(--muted);
+    padding:14px 8px;
+    font-size:.88rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:color .15s, border-color .15s;
+    letter-spacing:.2px;
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{
+    color:var(--accent);
+    border-bottom-color:var(--accent);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main{
+    max-width:880px;
+    margin:0 auto;
+    padding:28px 16px 80px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline{
+    position:relative;
+    padding-left:28px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:9px;
+    top:6px;
+    bottom:6px;
+    width:2px;
+    background:var(--border);
+  }
+  .day{
+    position:relative;
+    margin-bottom:28px;
+  }
+  .day::before{
+    content:"";
+    position:absolute;
+    left:-28px;
+    top:6px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid var(--bg);
+  }
+  .day.pending::before{background:var(--pending);}
+  .day-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .day-header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    padding:14px 18px;
+    background:var(--card2);
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .day-header .date{font-weight:700;font-size:1.05rem;}
+  .day-header .place{color:var(--accent2);font-size:.9rem;font-weight:600;}
+  .events{padding:14px 18px;}
+  .event{
+    display:flex;
+    gap:14px;
+    padding:10px 0;
+    border-bottom:1px dashed var(--border);
+  }
+  .event:last-child{border-bottom:none;}
+  .event .time{
+    min-width:58px;
+    font-weight:700;
+    color:var(--accent);
+    font-size:.9rem;
+  }
+  .event .desc{flex:1;}
+  .event .desc b{color:var(--text);}
+  .event .desc .meta{
+    display:block;
+    color:var(--muted);
+    font-size:.85rem;
+    margin-top:2px;
+  }
+  .placeholder{
+    color:var(--muted);
+    font-style:italic;
+    font-size:.92rem;
+    padding:6px 0;
+  }
+  .badge{
+    display:inline-block;
+    font-size:.7rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--pending);
+    color:var(--text);
+    margin-left:8px;
+    vertical-align:middle;
+  }
+
+  /* ── INFO CARDS ── */
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+    margin-bottom:34px;
+  }
+  .info-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .info-card h3{
+    margin:0 0 10px;
+    font-size:.95rem;
+    color:var(--accent2);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .info-card ul{
+    margin:0;
+    padding-left:18px;
+    font-size:.9rem;
+    color:var(--muted);
+  }
+  .info-card li{margin-bottom:4px;}
+
+  /* ── LINKS & MAPS ── */
+  .map-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:10px;
+    font-size:.85rem;
+    color:var(--accent);
+    text-decoration:none;
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:8px;
+    background:var(--card2);
+  }
+  .map-link:hover{border-color:var(--accent);}
+  .map-embed{
+    margin-top:12px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .map-embed iframe{
+    width:100%;
+    height:220px;
+    border:0;
+    display:block;
+  }
+  .event .desc .map-link{margin-top:6px;}
+
+  /* ── SECTION TITLE ── */
+  .section-title{
+    font-size:1.3rem;
+    margin:36px 0 16px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--border);
+  }
+
+  /* ── CALENDAR ── */
+  .calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+    margin-bottom:34px;
+  }
+  .cal-weekday{
+    text-align:center;
+    font-size:.75rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    padding-bottom:4px;
+  }
+  .cal-cell{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:6px 6px 8px;
+    min-height:84px;
+    font-size:.72rem;
+    color:var(--muted);
+  }
+  .cal-cell.empty{background:transparent;border:none;}
+  .cal-cell.trip{background:var(--card2);border-color:var(--accent);}
+  .cal-cell .cal-day-num{
+    display:block;
+    font-weight:700;
+    font-size:.85rem;
+    color:var(--text);
+    margin-bottom:4px;
+  }
+  .cal-cell.trip .cal-day-num{color:var(--accent);}
+  .cal-cell .cal-label{display:block;line-height:1.3;}
+
+  /* ── GASTOS ── */
+  .gastos-form{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .gastos-form .full{grid-column:1/-1;}
+  .gastos-form label{
+    font-size:.82rem;
+    color:var(--muted);
+    display:block;
+    margin-bottom:4px;
+  }
+  .gastos-form input,
+  .gastos-form select{
+    width:100%;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:9px 12px;
+    color:var(--text);
+    font-size:.92rem;
+    outline:none;
+  }
+  .gastos-form input:focus,
+  .gastos-form select:focus{border-color:var(--accent);}
+  .gastos-form select option{background:var(--card2);}
+  .btn-add{
+    background:var(--accent);
+    color:#0f1620;
+    border:none;
+    border-radius:8px;
+    padding:10px 20px;
+    font-size:.92rem;
+    font-weight:700;
+    cursor:pointer;
+    width:100%;
+  }
+  .btn-add:hover{opacity:.9;}
+  .gastos-resumen{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .gasto-stat{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    text-align:center;
+  }
+  .gasto-stat .stat-label{
+    font-size:.78rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:6px;
+  }
+  .gasto-stat .stat-val{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--accent);
+  }
+  .gastos-table-wrap{overflow-x:auto;}
+  .gastos-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.88rem;
+  }
+  .gastos-table th{
+    text-align:left;
+    padding:10px 12px;
+    color:var(--muted);
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    border-bottom:1px solid var(--border);
+  }
+  .gastos-table td{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    vertical-align:middle;
+  }
+  .gastos-table tr:last-child td{border-bottom:none;}
+  .gastos-table tr:hover td{background:var(--card2);}
+  .cat-badge{
+    display:inline-block;
+    font-size:.72rem;
+    padding:2px 8px;
+    border-radius:10px;
+    font-weight:600;
+  }
+  .cat-comida{background:#1e3a2f;color:#5fb3a3;}
+  .cat-transporte{background:#1e2a3a;color:#5b9bd5;}
+  .cat-actividad{background:#3a2a1e;color:#e8a23d;}
+  .cat-alojamiento{background:#2a1e3a;color:#a06dd5;}
+  .cat-compras{background:#3a1e2a;color:#d56d9a;}
+  .cat-otro{background:#2c3a4d;color:#9bacc0;}
+  .btn-del{
+    background:none;
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--muted);
+    padding:4px 8px;
+    cursor:pointer;
+    font-size:.8rem;
+  }
+  .btn-del:hover{border-color:var(--danger);color:var(--danger);}
+  .empty-gastos{
+    text-align:center;
+    color:var(--muted);
+    font-style:italic;
+    padding:40px 0;
+  }
+
+  /* ── LISTA ── */
+  .checklist-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+    margin-bottom:34px;
+  }
+  .checklist-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .checklist-card h3{
+    margin:0 0 12px;
+    font-size:.95rem;
+    color:var(--accent2);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .check-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:5px 0;
+    border-bottom:1px dashed var(--border);
+    cursor:pointer;
+    user-select:none;
+  }
+  .check-item:last-child{border-bottom:none;}
+  .check-item input[type=checkbox]{
+    width:16px;
+    height:16px;
+    accent-color:var(--accent);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .check-item span{
+    font-size:.9rem;
+    color:var(--muted);
+    transition:color .15s;
+  }
+  .check-item.checked span{
+    color:var(--border);
+    text-decoration:line-through;
+  }
+  .checklist-progress{
+    margin-bottom:24px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .progress-bar-wrap{
+    flex:1;
+    background:var(--card2);
+    border-radius:6px;
+    height:10px;
+    overflow:hidden;
+  }
+  .progress-bar{
+    height:100%;
+    background:var(--accent);
+    border-radius:6px;
+    transition:width .3s;
+  }
+  .progress-label{
+    font-size:.88rem;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .outfits-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+  }
+  .outfit-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px 16px;
+  }
+  .outfit-card h4{
+    margin:0 0 8px;
+    font-size:.88rem;
+    color:var(--accent);
+    font-weight:700;
+  }
+  .outfit-card textarea{
+    width:100%;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-size:.85rem;
+    padding:8px 10px;
+    resize:vertical;
+    min-height:72px;
+    outline:none;
+    font-family:inherit;
+    line-height:1.4;
+  }
+  .outfit-card textarea:focus{border-color:var(--accent);}
+  .outfit-card textarea::placeholder{color:var(--border);}
+  .btn-reset-check{
+    background:none;
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    padding:7px 14px;
+    font-size:.82rem;
+    cursor:pointer;
+    margin-bottom:20px;
+  }
+  .btn-reset-check:hover{border-color:var(--accent);color:var(--accent);}
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:.8rem;
+    padding:20px;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .sync-toggle{
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    padding:8px 16px;
+    font-size:.85rem;
+    cursor:pointer;
+    margin-bottom:16px;
+  }
+  .sync-toggle:hover{border-color:var(--accent);color:var(--accent);}
+  .sync-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    max-width:800px;
+    margin:0 auto;
+    text-align:left;
+  }
+  @media(max-width:600px){.sync-box{grid-template-columns:1fr;}}
+  .sync-col{}
+  .sync-label{
+    font-size:.8rem;
+    color:var(--muted);
+    margin:0 0 6px;
+  }
+  .sync-box textarea{
+    width:100%;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-size:.78rem;
+    padding:8px 10px;
+    font-family:monospace;
+    resize:vertical;
+    outline:none;
+  }
+  .sync-box textarea:focus{border-color:var(--accent);}
+  .btn-sync{
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    padding:7px 14px;
+    font-size:.82rem;
+    cursor:pointer;
+  }
+  .btn-sync:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-import{background:var(--accent);color:#0f1620;border-color:var(--accent);font-weight:700;width:100%;}
+  .btn-import:hover{opacity:.9;color:#0f1620;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏔️ Catalina & Jaume — Dolomitas 2026</h1>
+  <p>11 — 21 julio 2026</p>
+  <div class="tags">
+    <span class="tag">✈️ Ryanair</span>
+    <span class="tag">🏠 Airbnb Milán</span>
+    <span class="tag">🚐 Indie Campers</span>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('resumen')">📅 Resumen</button>
+  <button class="tab-btn" onclick="showTab('consejos')">💡 Consejos</button>
+  <button class="tab-btn" onclick="showTab('gastos')">💶 Gastos</button>
+  <button class="tab-btn" onclick="showTab('lista')">🎒 Lista</button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     TAB 1: RESUMEN
+══════════════════════════════════════════ -->
+<div id="resumen" class="tab-content">
+<main>
+
+  <div class="section-title" style="margin-top:0;">🗺️ Mapa general (sitios guardados)</div>
+  <div class="map-embed" style="margin-bottom:34px;">
+    <iframe loading="lazy" style="height:480px;" src="https://www.google.com/maps/d/embed?mid=1B3qOkeotKK5d43mdnqosjVwyOm7gTjw"></iframe>
+  </div>
+
+  <div class="section-title">📅 Resumen en calendario</div>
+  <div class="calendar">
+    <div class="cal-weekday">Lun</div>
+    <div class="cal-weekday">Mar</div>
+    <div class="cal-weekday">Mié</div>
+    <div class="cal-weekday">Jue</div>
+    <div class="cal-weekday">Vie</div>
+    <div class="cal-weekday">Sáb</div>
+    <div class="cal-weekday">Dom</div>
+
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell trip"><span class="cal-day-num">11</span><span class="cal-label">✈️ Llegada Milán + ruta centro</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">12</span><span class="cal-label">🚌 Como, Lugano y Bellagio</span></div>
+
+    <div class="cal-cell trip"><span class="cal-day-num">13</span><span class="cal-label">🚐 Recogida camper · dormir Misurina</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">14</span><span class="cal-label">🥾 Tre Cime + Grotta + Cadini + Misurina</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">15</span><span class="cal-label">🥾 Lago di Braies + 🏘️ Cortina</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">16</span><span class="cal-label">🥾 Cinque Torri</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">17</span><span class="cal-label">🥾 Lago di Sorapis</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">18</span><span class="cal-label">🏘️ Sta. Maddalena + 🥾 Val di Funes/Odle</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">19</span><span class="cal-label">🥾 Seceda + Val Gardena</span></div>
+
+    <div class="cal-cell trip"><span class="cal-day-num">20</span><span class="cal-label">🥾 Alpe di Siusi + 🏘️ Castelrotto + Ortisei</span></div>
+    <div class="cal-cell trip"><span class="cal-day-num">21</span><span class="cal-label">🥾 Lago di Carezza + 🏘️ Bolzano + ✈️ vuelta</span></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+  </div>
+
+  <div class="section-title">🗺️ Itinerario día a día</div>
+  <div class="timeline">
+
+    <!-- DÍA 1 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Sáb 11 julio</span>
+          <span class="place">Milán</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">04:15</div><div class="desc"><b>Llegada al aeropuerto PMI</b><span class="meta">Facturación maleta 20kg, Ryanair</span></div></div>
+          <div class="event"><div class="time">06:15</div><div class="desc"><b>Vuelo PMI → Milán</b></div></div>
+          <div class="event"><div class="time">08:20</div><div class="desc"><b>Llegada a Milán</b><br><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Aeropuerto+de+Milan">📍 Mapa aeropuerto Milán</a></div></div>
+          <div class="event"><div class="time">—</div><div class="desc"><b>Check-in Airbnb</b><span class="meta">Via Domenico Cirillo, 14</span><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Via+Domenico+Cirillo+14+Milano">📍 Mapa Airbnb</a></div></div>
+          <div class="event">
+            <div class="time">🚶</div>
+            <div class="desc">
+              <b>Ruta a pie por Milán centro</b>
+              <span class="meta">Orden sugerido (sin horarios fijos):</span>
+              <ol style="margin:8px 0 0 0;padding-left:20px;color:var(--muted);font-size:.92rem;">
+                <li>Catedral de Milán (Duomo)<span class="badge">10:30 h reservado</span></li>
+                <li>Piazza Mercanti</li>
+                <li>San Bernardino alle Ossa</li>
+                <li>Galería Vittorio Emanuele II</li>
+                <li>Piazza della Scala</li>
+                <li>Castello Sforzesco<span class="badge">reservar entrada</span></li>
+                <li>Parque Sempione</li>
+                <li>Arco della Pace</li>
+                <li>Santa María de las Gracias <span class="badge">reservar entrada</span></li>
+              </ol>
+              <a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Catedral+de+Mil%C3%A1n,+P.za+del+Duomo,+20122+Milano+MI,+Italia/Panzerotti+Luini,+Via+Santa+Radegonda,+16,+20121+Milano+MI,+Italia/Piazza+Mercanti,+Piazza+dei+Mercanti,+20123+Milano+MI,+Italia/San+Bernardino+alle+Ossa,+Piazza+Santo+Stefano,+20122+Milano+MI,+Italia/Galer%C3%ADa+Vittorio+Emanuele+II,+20123+Milano+MI,+Italia/Piazza+della+Scala,+20121+Milano+MI,+Italia/Castello+Sforzesco+(Castillo+de+Los+Sforza),+Piazza+Castello,+20121+Milano+MI,+Italia/Parque+Sempione,+20121+Milano+MI,+Italia/Arco+della+Pace,+Piazza+Sempione,+20154+Milano+MI,+Italia/Santa+Mar%C3%ADa+de+las+Gracias,+Via+Giuseppe+Antonio+Sassi,+3,+20123+Milano+MI,+Italia">📍 Ver ruta completa en Google Maps</a>
+              <div class="map-embed">
+                <iframe loading="lazy" src="https://maps.google.com/maps?saddr=Catedral+de+Milan,+Piazza+del+Duomo,+Milano&daddr=Panzerotti+Luini,+Via+Santa+Radegonda+16,+Milano+to:Piazza+Mercanti,+Milano+to:San+Bernardino+alle+Ossa,+Piazza+Santo+Stefano,+Milano+to:Galleria+Vittorio+Emanuele+II,+Milano+to:Piazza+della+Scala,+Milano+to:Castello+Sforzesco,+Piazza+Castello,+Milano+to:Parco+Sempione,+Milano+to:Arco+della+Pace,+Milano+to:Santa+Maria+delle+Grazie,+Via+Caradosso,+Milano&output=embed"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 2 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Dom 12 julio</span>
+          <span class="place">Lago di Como, Lugano y Bellagio</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">08:30</div><div class="desc"><b>Salida de la excursión (Civitatis)</b><span class="meta">Desde el centro de Milán</span></div></div>
+          <div class="event"><div class="time">⏱️</div><div class="desc"><b>Excursión: Lago di Como, Lugano y Bellagio</b><span class="meta">Duración: 10–11 h · Precio: 189 €</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 3 -->
+    <div class="day pending">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Lun 13 julio</span>
+          <span class="place">Milán → Dolomitas <span class="badge">por definir</span></span>
+        </div>
+        <div class="events">
+          <div class="placeholder">Mañana: ¿Lago di Como? — por decidir</div>
+          <div class="event"><div class="time">14:30</div><div class="desc"><b>Recogida camper</b><span class="meta">Indie Campers, aeropuerto de Milán</span><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Indie+Campers+Milano+Aeroporto">📍 Mapa Indie Campers</a></div></div>
+          <div class="event"><div class="time">🌙</div><div class="desc"><b>Dormir cerca de Misurina</b><span class="meta">Para llegar a las 7:30 h al parking del Rifugio Auronzo al día siguiente</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 4 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Mar 14 julio</span>
+          <span class="place">Zona Este — Tre Cime / Misurina</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">07:30</div><div class="desc"><b>Llegada al parking Rifugio Auronzo</b><span class="meta">Parking reservado y pagado ✅ — 60 €</span><br><a class="map-link" target="_blank" rel="noopener" href="https://auronzo.info/en/parking-tre-cime-di-lavaredo/">🅿️ Ver reserva</a></div></div>
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Excursión: Tre Cime di Lavaredo + Grotta delle Tre Cime + Cadini di Misurina</b>
+            <span class="meta" style="display:block;">12 h disponibles para completar las 3 rutas antes de salir del parking. Es necesario acceder al Rifugio Auronzo.</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟡 Moderada &nbsp;·&nbsp; 📏 16,66 km &nbsp;·&nbsp; ⛰️ 736 m desnivel &nbsp;·&nbsp; ⏱️ 8h</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/118263031?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+          <div class="event"><div class="time">🚶</div><div class="desc"><b>Paseo alrededor del Lago di Misurina</b>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟢 Fácil &nbsp;·&nbsp; 📏 2,9 km &nbsp;·&nbsp; ⛰️ 6 m desnivel &nbsp;·&nbsp; ⏱️ 39 min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/139831820?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 5 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Mié 15 julio</span>
+          <span class="place">Zona Norte / Cortina</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Lago di Braies</b>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟡 Media &nbsp;·&nbsp; 📏 5,97 km &nbsp;·&nbsp; ⛰️ 53 m desnivel &nbsp;·&nbsp; ⏱️ 1h 37min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/177569321?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+          <div class="event"><div class="time">🏘️</div><div class="desc"><b>Cortina d'Ampezzo</b><span class="meta">Paseo por el pueblo. Pasear, restaurantes y ocio</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 6 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Jue 16 julio</span>
+          <span class="place">Zona Este — Cinque Torri</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Cinque Torri</b>
+            <span class="meta" style="display:block;">Desde Passo Giau - lugar perfecto para empezar ruta. Pernocta gratis: 46.48249, 12.05498.</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟢 Fácil &nbsp;·&nbsp; 📏 10 km &nbsp;·&nbsp; ⛰️ 430 m desnivel &nbsp;·&nbsp; ⏱️ 5h 45min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/234060960?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 7 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Vie 17 julio</span>
+          <span class="place">Zona Este — Lago di Sorapis</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Lago di Sorapis</b>
+            <span class="meta" style="display:block;">Subir 6–7h para ir solos.</span>
+            <span class="meta" style="display:block;margin-top:4px;">↔️ Ida y vuelta &nbsp;·&nbsp; 🟡 Moderada &nbsp;·&nbsp; 📏 12,17 km &nbsp;·&nbsp; ⛰️ 383 m desnivel &nbsp;·&nbsp; ⏱️ 4h 30min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/10927368?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 8 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Sáb 18 julio</span>
+          <span class="place">Val di Funes</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🏘️</div><div class="desc"><b>Santa Maddalena</b></div></div>
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Val di Funes + Rifugio delle Odle</b>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟡 Moderado &nbsp;·&nbsp; 📏 9,88 km &nbsp;·&nbsp; ⛰️ 553 m desnivel &nbsp;·&nbsp; ⏱️ 5h 45min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/147413918?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 9 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Dom 19 julio</span>
+          <span class="place">Val Gardena</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Seceda y Macizo de los Odle</b>
+            <span class="meta" style="display:block;">Aparcar en el parking superior "Cristauta" — 8 € todo el día</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟡 Moderado &nbsp;·&nbsp; 📏 16,51 km &nbsp;·&nbsp; ⛰️ 993 m desnivel &nbsp;·&nbsp; ⏱️ 4h</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/179060043?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Val Gardena</b>
+            <span class="meta" style="display:block;">Passo Gardena - Rifugio Jimmi - Cir Ridge - Rifugio Dantercepies</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟡 Moderado &nbsp;·&nbsp; 📏 6 km &nbsp;·&nbsp; ⛰️ 446 m desnivel &nbsp;·&nbsp; ⏱️ 1h 30min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/111568240?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 10 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Lun 20 julio</span>
+          <span class="place">Zona Sur / Val Gardena</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Alpe di Siusi</b>
+            <span class="meta" style="display:block;">Aparcar en el parking de Compatsch antes de las 9h — 30 €/día</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟢 Fácil &nbsp;·&nbsp; 📏 13 km &nbsp;·&nbsp; ⛰️ 332 m desnivel &nbsp;·&nbsp; ⏱️ 3h 30min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/178689876?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+          <div class="event"><div class="time">🏘️</div><div class="desc"><b>Castelrotto</b><span class="meta">Visita al pueblo</span></div></div>
+          <div class="event"><div class="time">🏘️</div><div class="desc"><b>Ortisei</b><span class="meta">Visita al pueblo</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 11 -->
+    <div class="day">
+      <div class="day-card">
+        <div class="day-header">
+          <span class="date">Mar 21 julio</span>
+          <span class="place">Zona Sur → Bolzano → Milán → PMI</span>
+        </div>
+        <div class="events">
+          <div class="event"><div class="time">🥾</div><div class="desc"><b>Lago di Carezza</b>
+            <span class="meta" style="display:block;">En la ruta de la Sella Ronda</span>
+            <span class="meta" style="display:block;margin-top:4px;">🔵 Circular &nbsp;·&nbsp; 🟢 Fácil &nbsp;·&nbsp; 📏 5,34 km &nbsp;·&nbsp; ⛰️ 121 m desnivel &nbsp;·&nbsp; ⏱️ 1h 45min</span>
+            <a class="map-link" target="_blank" rel="noopener" href="https://loc.wiki/t/80492378?h=3z5r2nl6yp&wa=so&la=es">🥾 Ver ruta en Wikiloc</a>
+          </div></div>
+          <div class="event"><div class="time">🏘️</div><div class="desc"><b>Bolzano</b><span class="meta">Visita al pueblo/ciudad</span></div></div>
+          <div class="event"><div class="time">19:30</div><div class="desc"><b>Devolución camper</b><span class="meta">Indie Campers, aeropuerto de Milán</span><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Indie+Campers+Milano+Aeroporto">📍 Mapa Indie Campers</a></div></div>
+          <div class="event"><div class="time">22:40</div><div class="desc"><b>Vuelo Milán → PMI</b><br><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Aeropuerto+de+Milan">📍 Mapa aeropuerto Milán</a></div></div>
+          <div class="event"><div class="time">00:25</div><div class="desc"><b>Llegada a Palma</b></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2: CONSEJOS
+══════════════════════════════════════════ -->
+<div id="consejos" class="tab-content" hidden>
+<main>
+
+  <div class="section-title" style="margin-top:0;">📋 Datos clave del viaje</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>Vuelo de ida — Sábado 11/07</h3>
+      <ul>
+        <li>PMI → Milán, Ryanair</li>
+        <li>Salida 06:15 h / Llegada 08:20 h</li>
+        <li>Estar en aeropuerto 2h antes (04:15 h) para facturar</li>
+        <li>1 maleta de 20 kg + 2 mochilas de cabina</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Vuelo de vuelta — Martes 21/07</h3>
+      <ul>
+        <li>Milán → PMI, Ryanair</li>
+        <li>Salida 22:40 h / Llegada 00:25 h</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Alojamiento en Milán</h3>
+      <ul>
+        <li>Airbnb — Via Domenico Cirillo, 14</li>
+        <li>11, 12 y 13 de julio</li>
+      </ul>
+      <a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Via+Domenico+Cirillo+14+Milano">📍 Ver en Google Maps</a>
+    </div>
+    <div class="info-card">
+      <h3>Camper — Indie Campers</h3>
+      <ul>
+        <li>Recogida: 13/07 a las 14:30 h (aeropuerto de Milán)</li>
+        <li>Devolución: 21/07 a las 19:30 h</li>
+        <li>Coste: 1.653 €</li>
+        <li>Km ilimitados gratis</li>
+        <li>Kit toallas + kit esencial de viaje (ropa de cama, limpieza post-viaje, mesa y sillas, kit cocina, kit limpieza, tabletas químicas)</li>
+        <li>Seguro: Plan de Protección Premium</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">🍝 Restaurantes y bares recomendados (Milán)</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>Para comer</h3>
+      <ul>
+        <li><b>All'Antico Vinaio</b> — focaccias/panini</li>
+        <li><b>Spontini</b> — pizza al taglio</li>
+        <li><b>Osteria da Fortuna</b> — osteria tradicional</li>
+        <li><b>Crazy Pizza</b> — pizza</li>
+        <li><b>Ristorante da Oscar</b> — carbonara</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Para merendar / desayunar</h3>
+      <ul>
+        <li><b>Panzerotti Luini</b> — panzerotti, para merendar</li>
+        <li><b>Aroma Napoletano</b> — cruasanes</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Dulce / postre</h3>
+      <ul>
+        <li><b>Grom</b> — heladería</li>
+        <li><b>Spuntiramisu</b> — tiramisú</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Para ver (aunque no se consuma)</h3>
+      <ul>
+        <li><b>Starbucks Reserve Roastery</b> — visitar de paso por la zona</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">🚐 Consejos para las Dolomitas en camper</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>Apps imprescindibles</h3>
+      <ul>
+        <li><b>Park4Night</b> — para pernoctar y encontrar puntos de agua para rellenar</li>
+        <li><b>Wikiloc</b> — descargar rutas antes de salir (sin cobertura en montaña)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Aparcamiento</h3>
+      <ul>
+        <li>En <b>Alpe di Siusi</b>, evitar el parking principal — buscar zona gratuita</li>
+        <li>Comprar un <b>Parking Disk</b> para parkings limitados por tiempo (supermercados, gasolineras)</li>
+        <li><b>Lago di Braies</b> — aprox. 20–40 € camper, reserva solo de 9 a 16 h ⚠️, tiempo variable</li>
+        <li><b>Lago di Carezza</b> — aprox. 40 € camper, sin reserva ❌, hasta 24 h</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Organización / horarios</h3>
+      <ul>
+        <li>Madrugar — levantarse hacia las 6:00–7:00 h cada día</li>
+        <li>Organizar bien las paradas y dónde dormir cada noche</li>
+        <li>Comprar grande antes de entrar en las Dolomitas (Lidl/Coop más baratos)</li>
+        <li>Llevar efectivo — en montaña puede faltar cobertura/datáfono</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>📔 Pasaporte de las Dolomitas</h3>
+      <ul>
+        <li>Es un diario/cuaderno de viaje organizado por zonas (Dolomitas del Norte, Centrales, Bellunesas y Occidentales) donde vas sellando cada refugio, alpe o museo que visitas.</li>
+        <li>Se compra en tiendas de souvenirs de montaña o estancos por la zona — aprox. 5 €.</li>
+        <li>En cada refugio/rifugio se pide el sello en la entrada o en el bar — normalmente lo tienen detrás de la barra.</li>
+        <li>También se pueden guardar tickets de telesillas/teleféricos como recuerdo extra.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Equipo a llevar</h3>
+      <ul>
+        <li>Ropa de abrigo (aunque sea verano) y por capas</li>
+        <li>Calzado adecuado para senderismo</li>
+        <li>Palos de trekking</li>
+        <li>Cantimplora</li>
+        <li>Mini botiquín</li>
+        <li>Adaptador de enchufe (?)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">📍 Resumen sitios por explorar</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>🏘️ Pueblo</h3>
+      <ul>
+        <li>Cortina d'Ampezzo</li>
+        <li>Santa Maddalena</li>
+        <li>Ortisei</li>
+        <li>Castelrotto</li>
+        <li>Bolzano</li>
+        <li>Molveno <span class="badge">¿confirmar?</span></li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>🥾 Excursión</h3>
+      <ul>
+        <li>Tre Cime di Lavaredo</li>
+        <li>Grotta delle Tre Cime</li>
+        <li>Cadini di Misurina</li>
+        <li>Lago di Sorapis</li>
+        <li>Cinque Torri</li>
+        <li>Lago di Braies</li>
+        <li>Val di Funes</li>
+        <li>Rifugio delle Odle</li>
+        <li>Seceda y Macizo de los Odle</li>
+        <li>Val Gardena (Passo Gardena)</li>
+        <li>Alpe di Siusi</li>
+        <li>Lago di Carezza</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>👀 Mirador</h3>
+      <ul>
+        <li>Snake Road</li>
+        <li>Passo Giau</li>
+        <li>Passo di Sella</li>
+        <li>Passo Gardena</li>
+        <li>Würzjoch</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3: GASTOS
+══════════════════════════════════════════ -->
+<div id="gastos" class="tab-content" hidden>
+<main>
+
+  <div class="section-title" style="margin-top:0;">💶 Registro de gastos</div>
+
+  <div class="gastos-resumen" id="gastos-stats">
+    <div class="gasto-stat">
+      <div class="stat-label">Total gastado</div>
+      <div class="stat-val" id="stat-total">0 €</div>
+    </div>
+    <div class="gasto-stat">
+      <div class="stat-label">Catalina</div>
+      <div class="stat-val" id="stat-cata">0 €</div>
+    </div>
+    <div class="gasto-stat">
+      <div class="stat-label">Jaume</div>
+      <div class="stat-val" id="stat-jaume">0 €</div>
+    </div>
+    <div class="gasto-stat">
+      <div class="stat-label">Ambos / compartido</div>
+      <div class="stat-val" id="stat-ambos">0 €</div>
+    </div>
+  </div>
+
+  <div class="gastos-form">
+    <div class="full">
+      <label>Descripción</label>
+      <input type="text" id="g-desc" placeholder="Ej: Cena en Cortina d'Ampezzo">
+    </div>
+    <div>
+      <label>Categoría</label>
+      <select id="g-cat">
+        <option value="comida">🍽️ Comida</option>
+        <option value="transporte">🚗 Transporte</option>
+        <option value="actividad">🥾 Actividad / Entrada</option>
+        <option value="alojamiento">🏕️ Alojamiento / Parking</option>
+        <option value="compras">🛍️ Compras</option>
+        <option value="otro">📦 Otro</option>
+      </select>
+    </div>
+    <div>
+      <label>Pagado por</label>
+      <select id="g-quien">
+        <option value="ambos">Ambos</option>
+        <option value="cata">Catalina</option>
+        <option value="jaume">Jaume</option>
+      </select>
+    </div>
+    <div>
+      <label>Importe (€)</label>
+      <input type="number" id="g-importe" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <div>
+      <label>Día</label>
+      <select id="g-dia">
+        <option value="">— Sin especificar —</option>
+        <option value="Sáb 11 jul">Sáb 11 jul — Milán</option>
+        <option value="Dom 12 jul">Dom 12 jul — Como / Lugano</option>
+        <option value="Lun 13 jul">Lun 13 jul — Camper</option>
+        <option value="Mar 14 jul">Mar 14 jul — Tre Cime</option>
+        <option value="Mié 15 jul">Mié 15 jul — Braies / Cortina</option>
+        <option value="Jue 16 jul">Jue 16 jul — Cinque Torri</option>
+        <option value="Vie 17 jul">Vie 17 jul — Sorapis</option>
+        <option value="Sáb 18 jul">Sáb 18 jul — Val di Funes</option>
+        <option value="Dom 19 jul">Dom 19 jul — Val Gardena</option>
+        <option value="Lun 20 jul">Lun 20 jul — Alpe di Siusi</option>
+        <option value="Mar 21 jul">Mar 21 jul — Vuelta</option>
+      </select>
+    </div>
+    <div class="full">
+      <button class="btn-add" onclick="addGasto()">+ Añadir gasto</button>
+    </div>
+  </div>
+
+  <div class="gastos-table-wrap">
+    <table class="gastos-table">
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th>Descripción</th>
+          <th>Categoría</th>
+          <th>Pagado por</th>
+          <th style="text-align:right;">Importe</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="gastos-body">
+      </tbody>
+    </table>
+    <div id="empty-gastos" class="empty-gastos">Aún no hay gastos registrados 💸</div>
+  </div>
+
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 4: LISTA
+══════════════════════════════════════════ -->
+<div id="lista" class="tab-content" hidden>
+<main>
+
+  <div class="section-title" style="margin-top:0;">🎒 Lista de cosas a llevar</div>
+
+  <div class="checklist-progress">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+    <span class="progress-label" id="progress-label">0 / 0 preparados</span>
+    <button class="btn-reset-check" onclick="resetChecks()" style="margin:0;">Reiniciar</button>
+  </div>
+
+  <div class="checklist-grid" id="checklist-grid">
+
+    <div class="checklist-card">
+      <h3>📄 Essencial</h3>
+      <label class="check-item"><input type="checkbox" data-id="doc1"><span>Bolso</span></label>
+      <label class="check-item"><input type="checkbox" data-id="doc2"><span>DNI</span></label>
+      <label class="check-item"><input type="checkbox" data-id="doc3"><span>Carnet de conduir</span></label>
+      <label class="check-item"><input type="checkbox" data-id="doc4"><span>Efectiu</span></label>
+      <label class="check-item"><input type="checkbox" data-id="doc5"><span>Estoig dents</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>👟 Sabates</h3>
+      <label class="check-item"><input type="checkbox" data-id="cal1"><span>Salomon x2</span></label>
+      <label class="check-item"><input type="checkbox" data-id="cal2"><span>Sabates per caminar (posat)</span></label>
+      <label class="check-item"><input type="checkbox" data-id="cal3"><span>Crocs</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🥾 Senderisme</h3>
+      <label class="check-item"><input type="checkbox" data-id="sen1"><span>Palos de trekking</span></label>
+      <label class="check-item"><input type="checkbox" data-id="sen2"><span>Cantimplora</span></label>
+      <label class="check-item"><input type="checkbox" data-id="sen3"><span>Motxila de dia</span></label>
+      <label class="check-item"><input type="checkbox" data-id="sen8"><span>Xubasquero</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🧥 Roba</h3>
+      <label class="check-item"><input type="checkbox" data-id="rop1"><span>Jaqueta Oysho</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop2"><span>Jaqueta negre / sudadera / jersei</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop3"><span>5 colsons mona</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop3"><span>6 camisetes mona</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop3"><span>6 colsons deport</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop3"><span>7 camisetes deport</span></label>
+
+      <!-- JAUME -->
+      <label class="check-item"><input type="checkbox" data-id="rop4"><span>2 vaqueros curts</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>5 camisetes normals</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop6"><span>7 camisetes de deport</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop7"><span>Sudadera / jaqueta</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop8"><span>2 colsons decathlon adidas</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop9"><span>5 colsons xandal curt adidas</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop10"><span>1 colsons xandal llarg</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🧥 Roba interior</h3>
+      <label class="check-item"><input type="checkbox" data-id="rop1"><span>17 tangas</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop2"><span>13 calcetins normals</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop3"><span>5 calcetins gruixats</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop4"><span>1 calcetins correr</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>1 calcetins llargs</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>1 sostens deport</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>3 sostens WS</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>1 sostens negres CK</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop5"><span>1 sostens sense tires</span></label>
+
+      <!-- JAUME -->
+      <label class="check-item"><input type="checkbox" data-id="rop6"><span>17 calcetins normals (J)</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop7"><span>X calcetins llargs (J)</span></label>
+      <label class="check-item"><input type="checkbox" data-id="rop8"><span>13 calsonsillos</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🧴 Neceser</h3>
+      <label class="check-item"><input type="checkbox" data-id="nes1" checked><span>Xampú</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes2" checked><span>Mascarilla</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes3" checked><span>Esponja</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes4" checked><span>Gel marró pell</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes5" checked><span>Oli cabells</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes6" checked><span>Gel taronja pell</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes7"><span>Raspall pell</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes8" checked><span>Got2Be celles</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes9" checked><span>Colònia</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes10" checked><span>Desodorant</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes11"><span>Crema solar cara</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes12"><span>Skincare</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes13" checked><span>Turbant</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes14"><span>Pinça</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes15"><span>Coletero</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes16"><span>Secador</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes18" checked><span>Lentilles</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes19" checked><span>Líquid lentilles</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes20" checked><span>Gel rosa coleta</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes21"><span>Cuchilla</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes22"><span>Cacao</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes22"><span>Tampax i compreses</span></label>
+      <label class="check-item"><input type="checkbox" data-id="nes17" checked><span>Desodorant Jaume</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🩹 Altres</h3>
+      <label class="check-item"><input type="checkbox" data-id="bot1"><span>Gorra</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot2"><span>Banyador J</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot3"><span>Bikini</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Cartes</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Rinyo correr</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Bolso deportiu</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Tripode</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Ulleres de sol</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🩹 Botiquín</h3>
+      <label class="check-item"><input type="checkbox" data-id="bot1"><span>Ibuprofeno / paracetamol</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot2"><span>Crema peu</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot3"><span>Pastilles peu</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Pomada per rozaduras</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Calcetí peu</span></label>
+      <label class="check-item"><input type="checkbox" data-id="bot4"><span>Compeed</span></label>
+
+    </div>
+
+    <div class="checklist-card">
+      <h3>📱 Tecnologia</h3>
+      <label class="check-item"><input type="checkbox" data-id="tec1"><span>Carregador</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec2"><span>Power bank</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec3"><span>Auriculars</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec4"><span>Càmera de fotos</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec4"><span>Ordenador</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec4"><span>iPad</span></label>
+      <label class="check-item"><input type="checkbox" data-id="tec4"><span>Carregador rellotge</span></label>
+    </div>
+
+    <div class="checklist-card">
+      <h3>🚐 Per sa camper</h3>
+      <label class="check-item"><input type="checkbox" data-id="cam1"><span>Tovalloles</span></label>
+      <label class="check-item"><input type="checkbox" data-id="cam6"><span>Llumeta</span></label>
+    </div>
+
+  </div>
+
+  <div class="section-title">👗 Outfits por día</div>
+  <p style="color:var(--muted);font-size:.88rem;margin-top:-10px;margin-bottom:20px;">Apunta aquí qué tienes pensado ponerte cada día.</p>
+  <div class="outfits-grid" id="outfits-grid">
+    <div class="outfit-card"><h4>Sáb 11 jul — Milán</h4><textarea data-outfit="11" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Dom 12 jul — Como / Lugano</h4><textarea data-outfit="12" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Lun 13 jul — Camper</h4><textarea data-outfit="13" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Mar 14 jul — Tre Cime</h4><textarea data-outfit="14" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Mié 15 jul — Braies / Cortina</h4><textarea data-outfit="15" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Jue 16 jul — Cinque Torri</h4><textarea data-outfit="16" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Vie 17 jul — Sorapis</h4><textarea data-outfit="17" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Sáb 18 jul — Val di Funes</h4><textarea data-outfit="18" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Dom 19 jul — Val Gardena</h4><textarea data-outfit="19" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Lun 20 jul — Alpe di Siusi</h4><textarea data-outfit="20" placeholder="Outfit del día..."></textarea></div>
+    <div class="outfit-card"><h4>Mar 21 jul — Vuelta</h4><textarea data-outfit="21" placeholder="Outfit del día..."></textarea></div>
+  </div>
+
+</main>
+</div>
+
+<footer>
+  <button class="sync-toggle" onclick="toggleSync()">🔄 Exportar / Importar datos</button>
+  <div id="sync-panel" hidden>
+    <div class="sync-box">
+      <div class="sync-col">
+        <p class="sync-label">📤 Exportar — copia este texto y guárdalo o envíatelo</p>
+        <textarea id="export-area" readonly rows="5" placeholder="Pulsa el botón para generar..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn-sync" onclick="doExport()">Generar</button>
+          <button class="btn-sync" onclick="copyExport()">Copiar</button>
+        </div>
+      </div>
+      <div class="sync-col">
+        <p class="sync-label">📥 Importar — pega aquí los datos del otro dispositivo</p>
+        <textarea id="import-area" rows="5" placeholder="Pega aquí el texto exportado..."></textarea>
+        <div style="margin-top:8px;">
+          <button class="btn-sync btn-import" onclick="doImport()">Importar y aplicar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="margin:16px 0 0;font-size:.78rem;">🧡</p>
+</footer>
+
+<script>
+// ── TAB NAVIGATION ──
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.hidden = true);
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).hidden = false;
+  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+  if (id === 'gastos') renderGastos();
+  if (id === 'lista') { loadChecks(); loadOutfits(); }
+}
+
+// ── GASTOS ──
+const GASTOS_SEED = [
+  { id: 1, desc: 'Camper Indie Campers', cat: 'alojamiento', quien: 'cata', importe: 1673.00, dia: '' },
+  { id: 2, desc: 'Vuelo PMI → Milán (ida)', cat: 'transporte', quien: 'cata', importe: 226.00, dia: 'Sáb 11 jul' },
+  { id: 3, desc: 'Maleta facturada Ryanair', cat: 'transporte', quien: 'cata', importe: 49.50, dia: 'Sáb 11 jul' },
+  { id: 4, desc: 'Tren Como', cat: 'transporte', quien: 'cata', importe: 11.00, dia: 'Dom 12 jul' },
+  { id: 5, desc: 'Airbnb Milán', cat: 'alojamiento', quien: 'cata', importe: 258.11, dia: '' },
+  { id: 6, desc: 'Parking Tre Cime di Lavaredo', cat: 'actividad', quien: 'cata', importe: 60.00, dia: 'Mar 14 jul' },
+  { id: 7, desc: 'Entradas catedral Milán', cat: 'actividad', quien: 'cata', importe: 52.00, dia: 'Sáb 11 jul' },
+];
+function getGastos() {
+  const stored = localStorage.getItem('dolomitas_gastos');
+  if (stored === null) {
+    saveGastos(GASTOS_SEED);
+    return GASTOS_SEED;
+  }
+  return JSON.parse(stored);
+}
+function saveGastos(arr) {
+  localStorage.setItem('dolomitas_gastos', JSON.stringify(arr));
+}
+const CAT_LABELS = {
+  comida:'🍽️ Comida', transporte:'🚗 Transporte', actividad:'🥾 Actividad',
+  alojamiento:'🏕️ Alojamiento', compras:'🛍️ Compras', otro:'📦 Otro'
+};
+const QUIEN_LABELS = { ambos:'Ambos', cata:'Catalina', jaume:'Jaume' };
+function addGasto() {
+  const desc = document.getElementById('g-desc').value.trim();
+  const cat = document.getElementById('g-cat').value;
+  const quien = document.getElementById('g-quien').value;
+  const importe = parseFloat(document.getElementById('g-importe').value);
+  const dia = document.getElementById('g-dia').value;
+  if (!desc || isNaN(importe) || importe <= 0) {
+    alert('Añade una descripción y un importe válido.');
+    return;
+  }
+  const gastos = getGastos();
+  gastos.push({ id: Date.now(), desc, cat, quien, importe, dia });
+  saveGastos(gastos);
+  document.getElementById('g-desc').value = '';
+  document.getElementById('g-importe').value = '';
+  document.getElementById('g-dia').value = '';
+  renderGastos();
+}
+function deleteGasto(id) {
+  saveGastos(getGastos().filter(g => g.id !== id));
+  renderGastos();
+}
+function renderGastos() {
+  const gastos = getGastos();
+  const body = document.getElementById('gastos-body');
+  const empty = document.getElementById('empty-gastos');
+  body.innerHTML = '';
+  if (gastos.length === 0) { empty.style.display = 'block'; } else { empty.style.display = 'none'; }
+  let total = 0, cata = 0, jaume = 0, ambos = 0;
+  gastos.forEach(g => {
+    total += g.importe;
+    if (g.quien === 'cata') cata += g.importe;
+    else if (g.quien === 'jaume') jaume += g.importe;
+    else ambos += g.importe;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:var(--muted);font-size:.82rem;">${g.dia || '—'}</td>
+      <td>${g.desc}</td>
+      <td><span class="cat-badge cat-${g.cat}">${CAT_LABELS[g.cat]}</span></td>
+      <td style="color:var(--muted);">${QUIEN_LABELS[g.quien]}</td>
+      <td style="text-align:right;font-weight:700;color:var(--accent2);">${g.importe.toFixed(2)} €</td>
+      <td><button class="btn-del" onclick="deleteGasto(${g.id})">✕</button></td>
+    `;
+    body.appendChild(tr);
+  });
+  const fmt = n => n.toFixed(2) + ' €';
+  document.getElementById('stat-total').textContent = fmt(total);
+  document.getElementById('stat-cata').textContent = fmt(cata);
+  document.getElementById('stat-jaume').textContent = fmt(jaume);
+  document.getElementById('stat-ambos').textContent = fmt(ambos);
+}
+
+// ── CHECKLIST ──
+function loadChecks() {
+  const saved = JSON.parse(localStorage.getItem('dolomitas_checks') || 'null');
+  const items = document.querySelectorAll('.check-item input[type=checkbox]');
+  items.forEach(cb => {
+    cb.checked = saved ? !!saved[cb.dataset.id] : cb.defaultChecked;
+    cb.closest('.check-item').classList.toggle('checked', cb.checked);
+    cb.addEventListener('change', () => {
+      cb.closest('.check-item').classList.toggle('checked', cb.checked);
+      saveChecks();
+    });
+  });
+  updateProgress();
+}
+function saveChecks() {
+  const saved = {};
+  document.querySelectorAll('.check-item input[type=checkbox]').forEach(cb => {
+    saved[cb.dataset.id] = cb.checked;
+  });
+  localStorage.setItem('dolomitas_checks', JSON.stringify(saved));
+  updateProgress();
+}
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item input[type=checkbox]');
+  const total = items.length;
+  const done = [...items].filter(cb => cb.checked).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${done} / ${total} preparados`;
+}
+function resetChecks() {
+  if (!confirm('¿Reiniciar toda la lista?')) return;
+  document.querySelectorAll('.check-item input[type=checkbox]').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.check-item').classList.remove('checked');
+  });
+  localStorage.removeItem('dolomitas_checks');
+  updateProgress();
+}
+
+// ── OUTFITS ──
+function loadOutfits() {
+  const saved = JSON.parse(localStorage.getItem('dolomitas_outfits') || '{}');
+  document.querySelectorAll('[data-outfit]').forEach(ta => {
+    ta.value = saved[ta.dataset.outfit] || '';
+    ta.addEventListener('input', saveOutfits);
+  });
+}
+function saveOutfits() {
+  const saved = {};
+  document.querySelectorAll('[data-outfit]').forEach(ta => {
+    saved[ta.dataset.outfit] = ta.value;
+  });
+  localStorage.setItem('dolomitas_outfits', JSON.stringify(saved));
+}
+
+// ── SYNC ──
+const SYNC_KEYS = ['dolomitas_gastos','dolomitas_checks','dolomitas_outfits'];
+function toggleSync() {
+  const panel = document.getElementById('sync-panel');
+  panel.hidden = !panel.hidden;
+}
+function doExport() {
+  const data = {};
+  SYNC_KEYS.forEach(k => { const v = localStorage.getItem(k); if (v) data[k] = JSON.parse(v); });
+  document.getElementById('export-area').value = JSON.stringify(data);
+}
+function copyExport() {
+  const area = document.getElementById('export-area');
+  if (!area.value) doExport();
+  navigator.clipboard.writeText(area.value).then(() => alert('¡Copiado al portapapeles!')).catch(() => {
+    area.select(); document.execCommand('copy'); alert('¡Copiado!');
+  });
+}
+function doImport() {
+  const text = document.getElementById('import-area').value.trim();
+  if (!text) { alert('Pega primero los datos exportados.'); return; }
+  try {
+    const data = JSON.parse(text);
+    SYNC_KEYS.forEach(k => { if (data[k] !== undefined) localStorage.setItem(k, JSON.stringify(data[k])); });
+    alert('✅ Datos importados. Recarga la página para verlos aplicados.');
+    document.getElementById('import-area').value = '';
+  } catch(e) { alert('❌ El texto no es válido. Asegúrate de copiar el texto completo.'); }
+}
+</script>
+
+</body>
+</html>
