@@ -90,6 +90,7 @@
   /* ── MAIN CONTENT ── */
   main{
     max-width:880px;
+    min-width:472px;
     margin:0 auto;
     padding:28px 16px 80px;
   }
@@ -249,7 +250,7 @@
   /* ── CALENDAR ── */
   .calendar{
     display:grid;
-    grid-template-columns:repeat(7,1fr);
+    grid-template-columns:repeat(7,minmax(0,1fr));
     gap:6px;
     margin-bottom:34px;
   }
@@ -267,8 +268,10 @@
     border-radius:8px;
     padding:6px 6px 8px;
     min-height:84px;
+    min-width:0;
     font-size:.72rem;
     color:var(--muted);
+    overflow-wrap:break-word;
   }
   .cal-cell.empty{background:transparent;border:none;}
   .cal-cell.trip{background:var(--card2);border-color:var(--accent);}
@@ -280,7 +283,7 @@
     margin-bottom:4px;
   }
   .cal-cell.trip .cal-day-num{color:var(--accent);}
-  .cal-cell .cal-label{display:block;line-height:1.3;}
+  .cal-cell .cal-label{display:block;line-height:1.3;overflow-wrap:break-word;}
 
   /* ── GASTOS ── */
   .gastos-form{
