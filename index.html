@@ -1107,12 +1107,9 @@
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
       <div>
         <div class="stat-label">☁️ Sincronización entre dispositivos</div>
-        <div id="sync-status" style="font-size:.85rem;color:var(--muted);margin-top:4px;">Sin activar</div>
+        <div id="sync-status" style="font-size:.85rem;color:var(--muted);margin-top:4px;">Conectando…</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn-sync" onclick="activarSyncNube()">Activar</button>
-        <button class="btn-sync" onclick="conectarSyncNube()">Conectar con ID</button>
-      </div>
+      <button class="btn-sync" onclick="pullCloudGastos().then(renderGastos)">🔄 Sincronizar ahora</button>
     </div>
   </div>
 
@@ -1413,7 +1410,6 @@ function showTab(id) {
   document.getElementById(id).hidden = false;
   document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
   if (id === 'gastos') {
-    updateSyncStatus();
     renderGastos();
     pullCloudGastos().then(renderGastos);
     startCloudPolling();
@@ -1436,7 +1432,7 @@ const GASTOS_SEED = [
 function getGastos() {
   const stored = localStorage.getItem('dolomitas_gastos');
   if (stored === null) {
-    saveGastos(GASTOS_SEED);
+    localStorage.setItem('dolomitas_gastos', JSON.stringify(GASTOS_SEED));
     return GASTOS_SEED;
   }
   return JSON.parse(stored);
@@ -1447,76 +1443,42 @@ function saveGastos(arr) {
 }
 
 // ── CLOUD SYNC (gastos) ──
-// kvdb.io: almacén clave-valor anónimo. El ID del "bucket" se devuelve en el
-// cuerpo de la respuesta (no en una cabecera), para evitar problemas de CORS.
-const CLOUD_BASE = 'https://kvdb.io';
-const CLOUD_KEY = 'gastos';
-function getCloudBucket() { return localStorage.getItem('dolomitas_cloud_bucket'); }
-function setCloudBucket(id) { localStorage.setItem('dolomitas_cloud_bucket', id); }
+// Firestore (proyecto fijo "dolomitas-viaje"): todos los dispositivos leen y
+// escriben el mismo documento, sin ningún paso manual de activación.
+const FIRESTORE_DOC = 'https://firestore.googleapis.com/v1/projects/dolomitas-viaje/databases/(default)/documents/dolomitas/gastos';
 function setSyncStatus(text) {
   const el = document.getElementById('sync-status');
   if (el) el.textContent = text;
 }
-function updateSyncStatus() {
-  const id = getCloudBucket();
-  setSyncStatus(id ? `Activa ✅ (ID: ${id})` : 'Sin activar');
-}
-async function activarSyncNube() {
-  if (getCloudBucket()) {
-    prompt('La sincronización ya está activa. Comparte este ID con el otro dispositivo (usa "Conectar con ID" allí):', getCloudBucket());
-    return;
-  }
-  setSyncStatus('Activando…');
-  try {
-    const createRes = await fetch(`${CLOUD_BASE}/`, { method: 'POST' });
-    if (!createRes.ok) throw new Error('respuesta ' + createRes.status);
-    const id = (await createRes.text()).trim();
-    if (!id) throw new Error('El servicio no devolvió un ID de sincronización');
-    setCloudBucket(id);
-    await pushCloudGastos(getGastos());
-    updateSyncStatus();
-    prompt('✅ Sincronización activada. Copia este ID y pégalo en el otro dispositivo con "Conectar con ID":', id);
-  } catch (e) {
-    updateSyncStatus();
-    alert('❌ No se pudo activar la sincronización en la nube: ' + e.message + '\n\nAvisa a Claude de este error para probar otro proveedor.');
-  }
-}
-function conectarSyncNube() {
-  const id = prompt('Introduce el ID de sincronización que te compartió el otro dispositivo:');
-  if (!id) return;
-  setCloudBucket(id.trim());
-  updateSyncStatus();
-  pullCloudGastos().then(() => renderGastos());
-}
 async function pushCloudGastos(gastos) {
-  const id = getCloudBucket();
-  if (!id) return;
   try {
-    const res = await fetch(`${CLOUD_BASE}/${id}/${CLOUD_KEY}`, { method: 'POST', body: JSON.stringify(gastos) });
+    const res = await fetch(`${FIRESTORE_DOC}?updateMask.fieldPaths=data`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: { data: { stringValue: JSON.stringify(gastos) } } })
+    });
     if (!res.ok) throw new Error('respuesta ' + res.status);
-    setSyncStatus(`Sincronizado ✅ (ID: ${id})`);
+    setSyncStatus('Sincronizado ✅');
   } catch (e) {
-    setSyncStatus(`⚠️ No se pudo subir a la nube (sin conexión) — ID: ${id}`);
+    setSyncStatus('⚠️ No se pudo subir a la nube (sin conexión)');
   }
 }
 async function pullCloudGastos() {
-  const id = getCloudBucket();
-  if (!id) return;
   try {
-    const res = await fetch(`${CLOUD_BASE}/${id}/${CLOUD_KEY}`);
-    if (res.status === 404) { setSyncStatus(`Sincronizado ✅ (ID: ${id})`); return; }
+    const res = await fetch(FIRESTORE_DOC);
+    if (res.status === 404) { setSyncStatus('Sincronizado ✅ (sin datos remotos aún)'); return; }
     if (!res.ok) throw new Error('respuesta ' + res.status);
-    const text = await res.text();
-    if (text) localStorage.setItem('dolomitas_gastos', JSON.stringify(JSON.parse(text)));
-    setSyncStatus(`Sincronizado ✅ (ID: ${id})`);
+    const doc = await res.json();
+    const raw = doc.fields && doc.fields.data && doc.fields.data.stringValue;
+    if (raw) localStorage.setItem('dolomitas_gastos', JSON.stringify(JSON.parse(raw)));
+    setSyncStatus('Sincronizado ✅');
   } catch (e) {
-    setSyncStatus(`⚠️ No se pudo descargar de la nube — ID: ${id}`);
+    setSyncStatus('⚠️ No se pudo descargar de la nube');
   }
 }
 let cloudPollInterval = null;
 function startCloudPolling() {
   stopCloudPolling();
-  if (!getCloudBucket()) return;
   cloudPollInterval = setInterval(() => { pullCloudGastos().then(renderGastos); }, 15000);
 }
 function stopCloudPolling() {
