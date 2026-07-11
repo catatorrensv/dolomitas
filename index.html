@@ -1662,6 +1662,7 @@ function doImport() {
   try {
     const data = JSON.parse(text);
     SYNC_KEYS.forEach(k => { if (data[k] !== undefined) localStorage.setItem(k, JSON.stringify(data[k])); });
+    if (data.dolomitas_gastos !== undefined) pushCloudGastos(data.dolomitas_gastos);
     alert('✅ Datos importados. Recarga la página para verlos aplicados.');
     document.getElementById('import-area').value = '';
   } catch(e) { alert('❌ El texto no es válido. Asegúrate de copiar el texto completo.'); }
