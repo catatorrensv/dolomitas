@@ -1137,6 +1137,19 @@
     <div class="stat-val" id="stat-balance" style="font-size:1.2rem;">Todo cuadrado</div>
   </div>
 
+  <div class="section-title">📅 Gastos por día</div>
+  <div class="gastos-table-wrap" style="margin-bottom:24px;">
+    <table class="gastos-table">
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th style="text-align:right;">Total</th>
+        </tr>
+      </thead>
+      <tbody id="gastos-por-dia-body"></tbody>
+    </table>
+  </div>
+
   <div class="gastos-form">
     <div class="full">
       <label>Descripción</label>
@@ -1579,6 +1592,33 @@ function renderGastos() {
     balanceEl.textContent = `Jaume debe a Catalina ${fmt(diff)}`;
   } else {
     balanceEl.textContent = `Catalina debe a Jaume ${fmt(-diff)}`;
+  }
+
+  renderGastosPorDia(gastos);
+}
+function renderGastosPorDia(gastos) {
+  const fmt = n => n.toFixed(2) + ' €';
+  const totales = {};
+  gastos.forEach(g => { const k = g.dia || ''; totales[k] = (totales[k] || 0) + g.importe; });
+  const dayOptions = Array.from(document.querySelectorAll('#g-dia option')).filter(o => o.value);
+  const body = document.getElementById('gastos-por-dia-body');
+  body.innerHTML = '';
+  dayOptions.forEach(opt => {
+    const tr = document.createElement('tr');
+    const total = totales[opt.value] || 0;
+    tr.innerHTML = `
+      <td>${opt.textContent}</td>
+      <td style="text-align:right;font-weight:700;color:var(--accent2);">${fmt(total)}</td>
+    `;
+    body.appendChild(tr);
+  });
+  if (totales[''] > 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:var(--muted);font-style:italic;">Sin día especificado</td>
+      <td style="text-align:right;font-weight:700;color:var(--accent2);">${fmt(totales[''])}</td>
+    `;
+    body.appendChild(tr);
   }
 }
 
