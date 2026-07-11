@@ -386,7 +386,9 @@
     font-weight:600;
   }
   .cat-comida{background:#1e3a2f;color:#5fb3a3;}
+  .cat-supermercado{background:#1e3a35;color:#4fc7b0;}
   .cat-transporte{background:#1e2a3a;color:#5b9bd5;}
+  .cat-parking{background:#1e2438;color:#7d8fd5;}
   .cat-actividad{background:#3a2a1e;color:#e8a23d;}
   .cat-alojamiento{background:#2a1e3a;color:#a06dd5;}
   .cat-compras{background:#3a1e2a;color:#d56d9a;}
@@ -1147,9 +1149,11 @@
       <label>Categoría</label>
       <select id="g-cat">
         <option value="comida">🍽️ Comida</option>
+        <option value="supermercado">🛒 Supermercado</option>
         <option value="transporte">🚗 Transporte</option>
+        <option value="parking">🅿️ Parking</option>
         <option value="actividad">🥾 Actividad / Entrada</option>
-        <option value="alojamiento">🏕️ Alojamiento / Parking</option>
+        <option value="alojamiento">🏕️ Alojamiento</option>
         <option value="compras">🛍️ Compras</option>
         <option value="otro">📦 Otro</option>
       </select>
@@ -1426,7 +1430,7 @@ const GASTOS_SEED = [
   { id: 3, desc: 'Maleta facturada Ryanair', cat: 'transporte', quien: 'cata', importe: 49.50, dia: 'Sáb 11 jul' },
   { id: 4, desc: 'Tren Como', cat: 'transporte', quien: 'cata', importe: 11.00, dia: 'Dom 12 jul' },
   { id: 5, desc: 'Airbnb Milán', cat: 'alojamiento', quien: 'cata', importe: 258.11, dia: '' },
-  { id: 6, desc: 'Parking Tre Cime di Lavaredo', cat: 'actividad', quien: 'cata', importe: 60.00, dia: 'Mar 14 jul' },
+  { id: 6, desc: 'Parking Tre Cime di Lavaredo', cat: 'parking', quien: 'cata', importe: 60.00, dia: 'Mar 14 jul' },
   { id: 7, desc: 'Entradas catedral Milán', cat: 'actividad', quien: 'cata', importe: 52.00, dia: 'Sáb 11 jul' },
 ];
 function getGastos() {
@@ -1519,8 +1523,8 @@ function stopCloudPolling() {
   if (cloudPollInterval) { clearInterval(cloudPollInterval); cloudPollInterval = null; }
 }
 const CAT_LABELS = {
-  comida:'🍽️ Comida', transporte:'🚗 Transporte', actividad:'🥾 Actividad',
-  alojamiento:'🏕️ Alojamiento', compras:'🛍️ Compras', otro:'📦 Otro'
+  comida:'🍽️ Comida', supermercado:'🛒 Supermercado', transporte:'🚗 Transporte', parking:'🅿️ Parking',
+  actividad:'🥾 Actividad', alojamiento:'🏕️ Alojamiento', compras:'🛍️ Compras', otro:'📦 Otro'
 };
 const QUIEN_LABELS = { ambos:'Ambos', cata:'Catalina', jaume:'Jaume' };
 let editingGastoId = null;
