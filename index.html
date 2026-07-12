@@ -1256,17 +1256,6 @@
 
   <div class="section-title">📊 Gastos por día</div>
   <div class="chart-card" id="chart-por-dia"></div>
-  <div class="gastos-table-wrap" style="margin-bottom:24px;">
-    <table class="gastos-table">
-      <thead>
-        <tr>
-          <th>Día</th>
-          <th style="text-align:right;">Total</th>
-        </tr>
-      </thead>
-      <tbody id="gastos-por-dia-body"></tbody>
-    </table>
-  </div>
 
 </main>
 </div>
@@ -1649,39 +1638,20 @@ function renderGastosPorDia(gastos) {
   gastos.forEach(g => { const k = g.dia || ''; totales[k] = (totales[k] || 0) + g.importe; });
   const dayOptions = Array.from(document.querySelectorAll('#g-dia option')).filter(o => o.value);
 
-  const body = document.getElementById('gastos-por-dia-body');
-  body.innerHTML = '';
-  dayOptions.forEach(opt => {
-    const tr = document.createElement('tr');
-    const total = totales[opt.value] || 0;
-    tr.innerHTML = `
-      <td>${opt.textContent}</td>
-      <td style="text-align:right;font-weight:700;color:var(--accent2);">${fmt(total)}</td>
-    `;
-    body.appendChild(tr);
-  });
-  if (totales[''] > 0) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="color:var(--muted);font-style:italic;">Sin día especificado</td>
-      <td style="text-align:right;font-weight:700;color:var(--accent2);">${fmt(totales[''])}</td>
-    `;
-    body.appendChild(tr);
-  }
-
   const chart = document.getElementById('chart-por-dia');
   chart.innerHTML = '';
-  const maxVal = Math.max(1, ...dayOptions.map(o => totales[o.value] || 0));
-  dayOptions.forEach(opt => {
-    const total = totales[opt.value] || 0;
+  const entries = dayOptions.map(opt => ({ label: opt.value, title: opt.textContent, total: totales[opt.value] || 0 }));
+  if (totales[''] > 0) entries.push({ label: 'Sin día', title: 'Sin día especificado', total: totales[''] });
+  const maxVal = Math.max(1, ...entries.map(e => e.total));
+  entries.forEach(({ label: dayLabel, title, total }) => {
     const row = document.createElement('div');
     row.className = 'chart-row' + (total === 0 ? ' is-zero' : '');
     row.tabIndex = 0;
-    row.title = `${opt.textContent}: ${fmt(total)}`;
+    row.title = `${title}: ${fmt(total)}`;
 
     const label = document.createElement('div');
     label.className = 'chart-row-label';
-    label.textContent = opt.value;
+    label.textContent = dayLabel;
 
     const track = document.createElement('div');
     track.className = 'chart-row-track';
