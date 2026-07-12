@@ -409,6 +409,52 @@
     font-style:italic;
     padding:40px 0;
   }
+  .chart-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 18px;
+    margin-bottom:24px;
+  }
+  .chart-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:5px 0;
+  }
+  .chart-row-label{
+    width:64px;
+    flex-shrink:0;
+    font-size:.72rem;
+    color:var(--muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .chart-row-track{
+    flex:1;
+    background:var(--card2);
+    border-radius:4px;
+    height:16px;
+    min-width:0;
+  }
+  .chart-row-bar{
+    height:100%;
+    background:var(--accent);
+    border-radius:0 4px 4px 0;
+    transition:background .15s;
+  }
+  .chart-row.is-zero .chart-row-bar{border-radius:4px;}
+  .chart-row:hover .chart-row-bar, .chart-row:focus-within .chart-row-bar{background:var(--accent2);}
+  .chart-row-value{
+    width:64px;
+    flex-shrink:0;
+    text-align:right;
+    font-size:.78rem;
+    font-weight:700;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+  }
 
   /* ── LISTA ── */
   .checklist-grid{
@@ -1137,19 +1183,6 @@
     <div class="stat-val" id="stat-balance" style="font-size:1.2rem;">Todo cuadrado</div>
   </div>
 
-  <div class="section-title">📅 Gastos por día</div>
-  <div class="gastos-table-wrap" style="margin-bottom:24px;">
-    <table class="gastos-table">
-      <thead>
-        <tr>
-          <th>Día</th>
-          <th style="text-align:right;">Total</th>
-        </tr>
-      </thead>
-      <tbody id="gastos-por-dia-body"></tbody>
-    </table>
-  </div>
-
   <div class="gastos-form">
     <div class="full">
       <label>Descripción</label>
@@ -1219,6 +1252,20 @@
       </tbody>
     </table>
     <div id="empty-gastos" class="empty-gastos">Aún no hay gastos registrados 💸</div>
+  </div>
+
+  <div class="section-title">📊 Gastos por día</div>
+  <div class="chart-card" id="chart-por-dia"></div>
+  <div class="gastos-table-wrap" style="margin-bottom:24px;">
+    <table class="gastos-table">
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th style="text-align:right;">Total</th>
+        </tr>
+      </thead>
+      <tbody id="gastos-por-dia-body"></tbody>
+    </table>
   </div>
 
 </main>
@@ -1601,6 +1648,7 @@ function renderGastosPorDia(gastos) {
   const totales = {};
   gastos.forEach(g => { const k = g.dia || ''; totales[k] = (totales[k] || 0) + g.importe; });
   const dayOptions = Array.from(document.querySelectorAll('#g-dia option')).filter(o => o.value);
+
   const body = document.getElementById('gastos-por-dia-body');
   body.innerHTML = '';
   dayOptions.forEach(opt => {
@@ -1620,6 +1668,37 @@ function renderGastosPorDia(gastos) {
     `;
     body.appendChild(tr);
   }
+
+  const chart = document.getElementById('chart-por-dia');
+  chart.innerHTML = '';
+  const maxVal = Math.max(1, ...dayOptions.map(o => totales[o.value] || 0));
+  dayOptions.forEach(opt => {
+    const total = totales[opt.value] || 0;
+    const row = document.createElement('div');
+    row.className = 'chart-row' + (total === 0 ? ' is-zero' : '');
+    row.tabIndex = 0;
+    row.title = `${opt.textContent}: ${fmt(total)}`;
+
+    const label = document.createElement('div');
+    label.className = 'chart-row-label';
+    label.textContent = opt.value;
+
+    const track = document.createElement('div');
+    track.className = 'chart-row-track';
+    const bar = document.createElement('div');
+    bar.className = 'chart-row-bar';
+    bar.style.width = ((total / maxVal) * 100).toFixed(1) + '%';
+    track.appendChild(bar);
+
+    const value = document.createElement('div');
+    value.className = 'chart-row-value';
+    value.textContent = total > 0 ? fmt(total) : '—';
+
+    row.appendChild(label);
+    row.appendChild(track);
+    row.appendChild(value);
+    chart.appendChild(row);
+  });
 }
 
 // ── CHECKLIST ──
