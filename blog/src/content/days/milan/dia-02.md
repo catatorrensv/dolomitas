@@ -1,9 +1,10 @@
 ---
-day: 1
-date: "2026-07-11"
-weekday: "Sábado"
-title: "Día 1 — Milán"
-location: "Milán"
+trip: "milan"
+tripDay: 2
+date: "2026-07-12"
+weekday: "Domingo"
+title: "Día 2 — Lago di Como (Como, Bellagio, Menaggio y Varenna)"
+location: "Lago di Como (Como, Bellagio, Menaggio y Varenna)"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-01/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/milan/dia-02/` y enlazarlas aquí)_
 
 ## Gasto del día
 

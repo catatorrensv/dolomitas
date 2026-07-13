@@ -1,9 +1,10 @@
 ---
-day: 7
-date: "2026-07-17"
-weekday: "Viernes"
-title: "Día 7 — Lago di Sorapis"
-location: "Lago di Sorapis"
+trip: "dolomitas"
+tripDay: 9
+date: "2026-07-21"
+weekday: "Martes"
+title: "Día 9 — Lago di Carezza, Bolzano, devolución del camper y vuelta a casa"
+location: "Lago di Carezza, Bolzano, devolución del camper y vuelta a casa"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-07/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-09/` y enlazarlas aquí)_
 
 ## Gasto del día
 

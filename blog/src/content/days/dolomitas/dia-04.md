@@ -1,9 +1,10 @@
 ---
-day: 4
-date: "2026-07-14"
-weekday: "Martes"
-title: "Día 4 — Tre Cime di Lavaredo, Grotta delle Tre Cime, Cadini di Misurina"
-location: "Tre Cime di Lavaredo, Grotta delle Tre Cime, Cadini di Misurina"
+trip: "dolomitas"
+tripDay: 4
+date: "2026-07-16"
+weekday: "Jueves"
+title: "Día 4 — Cinque Torri"
+location: "Cinque Torri"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-04/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-04/` y enlazarlas aquí)_
 
 ## Gasto del día
 

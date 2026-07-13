@@ -1,9 +1,10 @@
 ---
-day: 11
-date: "2026-07-21"
-weekday: "Martes"
-title: "Día 11 — Lago di Carezza, Bolzano y vuelta a casa"
-location: "Lago di Carezza, Bolzano y vuelta a casa"
+trip: "dolomitas"
+tripDay: 3
+date: "2026-07-15"
+weekday: "Miércoles"
+title: "Día 3 — Lago di Braies y Cortina d'Ampezzo"
+location: "Lago di Braies y Cortina d'Ampezzo"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-11/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-03/` y enlazarlas aquí)_
 
 ## Gasto del día
 

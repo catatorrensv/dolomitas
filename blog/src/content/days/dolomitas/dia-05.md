@@ -1,9 +1,10 @@
 ---
-day: 6
-date: "2026-07-16"
-weekday: "Jueves"
-title: "Día 6 — Cinque Torri"
-location: "Cinque Torri"
+trip: "dolomitas"
+tripDay: 5
+date: "2026-07-17"
+weekday: "Viernes"
+title: "Día 5 — Lago di Sorapis"
+location: "Lago di Sorapis"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-06/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-05/` y enlazarlas aquí)_
 
 ## Gasto del día
 

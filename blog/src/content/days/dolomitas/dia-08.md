@@ -1,9 +1,10 @@
 ---
-day: 2
-date: "2026-07-12"
-weekday: "Domingo"
-title: "Día 2 — Lago di Como (Como, Bellagio, Menaggio y Varenna)"
-location: "Lago di Como (Como, Bellagio, Menaggio y Varenna)"
+trip: "dolomitas"
+tripDay: 8
+date: "2026-07-20"
+weekday: "Lunes"
+title: "Día 8 — Alpe di Siusi, Castelrotto y Ortisei"
+location: "Alpe di Siusi, Castelrotto y Ortisei"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-02/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-08/` y enlazarlas aquí)_
 
 ## Gasto del día
 

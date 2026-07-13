@@ -1,9 +1,10 @@
 ---
-day: 8
-date: "2026-07-18"
+trip: "milan"
+tripDay: 1
+date: "2026-07-11"
 weekday: "Sábado"
-title: "Día 8 — Santa Maddalena y Val di Funes / Odle"
-location: "Santa Maddalena y Val di Funes / Odle"
+title: "Día 1 — Milán"
+location: "Milán"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-08/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/milan/dia-01/` y enlazarlas aquí)_
 
 ## Gasto del día
 

@@ -1,9 +1,10 @@
 ---
-day: 10
-date: "2026-07-20"
-weekday: "Lunes"
-title: "Día 10 — Alpe di Siusi, Castelrotto y Ortisei"
-location: "Alpe di Siusi, Castelrotto y Ortisei"
+trip: "dolomitas"
+tripDay: 6
+date: "2026-07-18"
+weekday: "Sábado"
+title: "Día 6 — Santa Maddalena y Val di Funes / Odle"
+location: "Santa Maddalena y Val di Funes / Odle"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-10/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-06/` y enlazarlas aquí)_
 
 ## Gasto del día
 

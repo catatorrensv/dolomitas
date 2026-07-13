@@ -1,9 +1,10 @@
 ---
-day: 9
-date: "2026-07-19"
-weekday: "Domingo"
-title: "Día 9 — Seceda y Val Gardena"
-location: "Seceda y Val Gardena"
+trip: "dolomitas"
+tripDay: 2
+date: "2026-07-14"
+weekday: "Martes"
+title: "Día 2 — Tre Cime di Lavaredo, Grotta delle Tre Cime, Cadini di Misurina"
+location: "Tre Cime di Lavaredo, Grotta delle Tre Cime, Cadini di Misurina"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-09/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-02/` y enlazarlas aquí)_
 
 ## Gasto del día
 

@@ -3,7 +3,8 @@ import { defineCollection, z } from 'astro:content';
 const days = defineCollection({
   type: 'content',
   schema: z.object({
-    day: z.number(),
+    trip: z.enum(['milan', 'dolomitas']),
+    tripDay: z.number(),
     date: z.string(),
     weekday: z.string(),
     title: z.string(),

@@ -1,9 +1,10 @@
 ---
-day: 5
-date: "2026-07-15"
-weekday: "Miércoles"
-title: "Día 5 — Lago di Braies y Cortina d'Ampezzo"
-location: "Lago di Braies y Cortina d'Ampezzo"
+trip: "dolomitas"
+tripDay: 7
+date: "2026-07-19"
+weekday: "Domingo"
+title: "Día 7 — Seceda y Val Gardena"
+location: "Seceda y Val Gardena"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-05/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-07/` y enlazarlas aquí)_
 
 ## Gasto del día
 

@@ -1,5 +1,9 @@
 import { defineConfig } from 'astro/config';
 
-// Hosting (GitHub Pages, custom domain, etc.) is still to be decided —
-// revisit `site` / `base` here once that's settled.
-export default defineConfig({});
+// Se sirve como subcarpeta /blog/ del mismo sitio (GitHub Pages) que la
+// app del viaje (index.html en la raíz del repo). Si en el futuro se
+// pasa a un dominio propio, ajustar `site`/`base` aquí.
+export default defineConfig({
+  site: 'https://catatorrensv.github.io',
+  base: '/dolomitas/blog/',
+});

@@ -1,9 +1,10 @@
 ---
-day: 3
+trip: "dolomitas"
+tripDay: 1
 date: "2026-07-13"
 weekday: "Lunes"
-title: "Día 3 — Milán → Dolomitas (recogida camper, dormir cerca de Misurina)"
-location: "Milán → Dolomitas (recogida camper, dormir cerca de Misurina)"
+title: "Día 1 — Recogida del camper y ruta hacia Misurina"
+location: "Recogida del camper y ruta hacia Misurina"
 summary: ""
 cover: ""
 draft: true
@@ -39,7 +40,7 @@ _(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
 
 ## Fotos
 
-_(añadir fotos en `public/photos/dia-03/` y enlazarlas aquí)_
+_(añadir fotos en `public/photos/dolomitas/dia-01/` y enlazarlas aquí)_
 
 ## Gasto del día
 
