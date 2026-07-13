@@ -386,6 +386,7 @@
     font-weight:600;
   }
   .cat-comida{background:#1e3a2f;color:#5fb3a3;}
+  .cat-copas{background:#3a2e1e;color:#d5a05b;}
   .cat-supermercado{background:#1e3a35;color:#4fc7b0;}
   .cat-transporte{background:#1e2a3a;color:#5b9bd5;}
   .cat-parking{background:#1e2438;color:#7d8fd5;}
@@ -1192,6 +1193,7 @@
       <label>Categoría</label>
       <select id="g-cat">
         <option value="comida">🍽️ Comida</option>
+        <option value="copas">🍻 Prendre algo</option>
         <option value="supermercado">🛒 Supermercado</option>
         <option value="transporte">🚗 Transporte</option>
         <option value="parking">🅿️ Parking</option>
@@ -1534,7 +1536,7 @@ function stopCloudPolling() {
   if (cloudPollInterval) { clearInterval(cloudPollInterval); cloudPollInterval = null; }
 }
 const CAT_LABELS = {
-  comida:'🍽️ Comida', supermercado:'🛒 Supermercado', transporte:'🚗 Transporte', parking:'🅿️ Parking',
+  comida:'🍽️ Comida', copas:'🍻 Prendre algo', supermercado:'🛒 Supermercado', transporte:'🚗 Transporte', parking:'🅿️ Parking',
   actividad:'🥾 Actividad', alojamiento:'🏕️ Alojamiento', compras:'🛍️ Compras', otro:'📦 Otro'
 };
 const QUIEN_LABELS = { ambos:'Ambos', cata:'Catalina', jaume:'Jaume' };
