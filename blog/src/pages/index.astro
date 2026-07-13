@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const days = (await getCollection('days')).sort((a, b) => a.data.day - b.data.day);
+---
+<BaseLayout title="Día a día">
+  <p class="muted">11 — 21 julio 2026 · Milán, Lago di Como y las Dolomitas</p>
+  <h2>Día a día</h2>
+  <ul style="list-style:none;padding:0;">
+    {days.map((d) => (
+      <li style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+        <a href={`/dias/${d.slug}`} style="font-weight:600;font-size:1.05rem;">
+          Día {d.data.day} — {d.data.location}
+        </a>
+        <div class="muted" style="font-size:.85rem;margin-top:2px;">
+          {d.data.weekday} {d.data.date}
+          {d.data.draft && ' · (borrador, aún sin escribir)'}
+        </div>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
