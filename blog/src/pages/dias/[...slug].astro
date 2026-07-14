@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { TRIPS } from '../../data/trips';
+
+export async function getStaticPaths() {
+  const days = await getCollection('days');
+  return days.map((d) => ({ params: { slug: d.slug }, props: { entry: d } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const trip = TRIPS[entry.data.trip];
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title={entry.data.title}>
+  <p class="muted"><a href={`${base}#${entry.data.trip}`}>← {trip.label}</a></p>
+  <p class="muted" style="margin-bottom:0;">{trip.label} · día {entry.data.tripDay}</p>
+  <h2 style="margin-top:4px;">{entry.data.title}</h2>
+  <p class="muted">{entry.data.weekday} {entry.data.date}</p>
+  {entry.data.summary && <p>{entry.data.summary}</p>}
+  <Content />
+</BaseLayout>

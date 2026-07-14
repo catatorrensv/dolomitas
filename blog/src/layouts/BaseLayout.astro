@@ -1,0 +1,76 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} · Dolomitas 2026</title>
+    <style is:global>
+      :root {
+        --bg: #0f1620;
+        --card: #1a2433;
+        --card2: #212e40;
+        --accent: #5fb3a3;
+        --accent2: #e8a23d;
+        --text: #eef2f6;
+        --muted: #9bacc0;
+        --border: #2c3a4d;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+      header {
+        padding: 24px 20px;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+      }
+      header a { color: var(--text); text-decoration: none; }
+      nav {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: .9rem;
+      }
+      nav a:hover { color: var(--accent); }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 28px 18px 80px;
+      }
+      h1, h2, h3 { color: var(--text); }
+      a { color: var(--accent); }
+      .muted { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><a href={base}>🏔️ Catalina &amp; Jaume — Dolomitas 2026</a></h1>
+      <nav>
+        <a href={base}>Día a día</a>
+        <a href={`${base}presupuesto`}>Presupuesto</a>
+        <a href={`${base}consejos`}>Consejos</a>
+        <a href={`${base}sobre-nosotros`}>Sobre nosotros</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
