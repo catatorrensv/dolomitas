@@ -12,19 +12,22 @@ draft: true
 
 ## Resumen del día
 
-_(2-3 frases: qué hicisteis y cómo os sentisteis ese día)_
+Día grande: Tre Cime di Lavaredo, la Grotta delle Tre Cime y Cadini di
+Misurina, con parada final en el Lago di Misurina antes de bajar.
 
 ## Itinerario
 
-_(qué hicisteis en orden, con horas si las recordáis)_
-
-- 
+- 07:30 — Llegada al parking del Rifugio Auronzo (reservado)
+- Excursión Tre Cime di Lavaredo + Grotta delle Tre Cime + Cadini di Misurina, hecha en sentido antihorario (ver highlights)
+- Bajada y paseo por el Lago di Misurina
 
 ## Lo más destacado
 
-_(el momento o momentos que más recordaréis de este día)_
-
-- 
+- Hicimos la ruta en **sentido antihorario** desde el Rifugio Auronzo
+  (hacia Rifugio Locatelli / Forcella Lavaredo primero, al revés del
+  sentido habitual). Salimos con la primera oleada de gente pero en
+  dirección contraria, así que apenas cruzamos a nadie durante buena
+  parte del recorrido — muy recomendable para evitar la masificación.
 
 ## Dónde comisteis / dormisteis
 
@@ -36,7 +39,11 @@ _(algo curioso, gracioso o inesperado que pasó)_
 
 ## Consejo del día
 
-_(algo que aprendisteis y le serviría a alguien que haga lo mismo)_
+⚠️ La mayoría de los aparcamientos de Lago di Misurina tienen un máximo
+de 2 h, aunque algunos permiten más tiempo — revisad la señalización al
+llegar. Nosotros aparcamos en
+[46°35'01.8"N 12°15'12.1"E](https://www.google.com/maps/search/?api=1&query=46.583833,12.253361)
+(límite de 2 h) y nos sobró tiempo de sobra para el paseo.
 
 ## Fotos
 
